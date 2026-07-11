@@ -32,20 +32,9 @@ The features I built for this project are as follows:
 ## Architecture
 
 ### Indexing
+<img width="201" height="291" alt="Diagram RAG TanyaLPDP drawio (1)" src="https://github.com/user-attachments/assets/428d0b00-aa27-4638-af5f-3e4d314be334" />
 
-                     PDF
-                      │
-                      ▼
-                    Loader
-                      │
-                      ▼
-                   Chunking
-                      │
-                      ▼
-                  Embedding
-                      │
-                      ▼
-            Chroma Vector Database
+
 
 ### Pipeline RAG
 
@@ -118,6 +107,7 @@ TanyaLPDP/
 ├── main.py                   # Key Components of a Terminal CLI-Based Chatbot Application
 ├── requirements.txt          # List of all Python libraries that must be installed
 └── README.md                 # Project Guide Documentation
+```
 
 ## Installation
 
@@ -126,7 +116,7 @@ Follow these steps to set up and run the TanyaLPDP Chatbot on your local machine
 ### 1. Clone the Repository
 Open your terminal and clone this repository:
 ```bash
-git clone [https://github.com/your_username/TanyaLPDP.git](https://github.com/your_username/TanyaLPDP.git)
+git clone https://github.com/rafiqiraihan/TanyaLPDP.git
 cd TanyaLPDP
 ```
 
