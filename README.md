@@ -32,7 +32,8 @@ The features I built for this project are as follows:
 ## Architecture
 
 ### Indexing
-<img width="201" height="291" alt="Diagram RAG TanyaLPDP drawio (1)" src="https://github.com/user-attachments/assets/428d0b00-aa27-4638-af5f-3e4d314be334" />
+
+<img width="300" height="434" alt="Diagram RAG TanyaLPDP drawio (2)" src="https://github.com/user-attachments/assets/931be1cc-36ad-4413-9454-853d3d243f0b" />
 
 
 
