@@ -39,31 +39,8 @@ The features I built for this project are as follows:
 
 ### Pipeline RAG
 
-                User Question
-                      │
-                      ▼
-              Hybrid Retrieval
-          ┌───────────┴───────────┐
-          │                       │
-     Chroma Search           BM25 Search
-          │                       │
-          └───────────┬───────────┘
-                      │
-             Ensemble Retriever
-                      │
-                      ▼
-            Cross-Encoder Reranker
-                      │
-                 Top 5 Chunks
-                      │
-                      ▼
-                Prompt Builder
-                      │
-                      ▼
-                   Groq LLM
-                      │
-                      ▼
-            Answer + Source Citation
+<img width="453" height="623" alt="Diagram RAG TanyaLPDP drawio" src="https://github.com/user-attachments/assets/c901d5d3-1f7b-49c9-bf8e-901e1921af15" />
+
 
 The user asks a question, which then triggers the retrieval process to find the relevant document chunks. The retrieval process uses two methods to improve accuracy by employing precise meanings and keywords to search for information stored in the database, which has already undergone indexing. Afterward, five highly relevant and precise chunks are selected. These five chunks are processed by an LLM, which operates using the Groq API and is provided with a prompt based on the project’s requirements, generating an answer along with citation sources.
 
@@ -167,7 +144,8 @@ pip freeze > requirements.txt
 
 ## Demo
 
-nanti ditambah di github
+<img width="1301" height="910" alt="Screenshot 2026-07-11 193045" src="https://github.com/user-attachments/assets/1be7262e-d753-4d23-8d56-b5187988f5cb" />
+
 
 ## Future Improvements
 * FastAPI REST API
