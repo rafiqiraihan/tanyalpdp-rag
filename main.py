@@ -5,8 +5,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 if CURRENT_DIR not in sys.path:
     sys.path.append(CURRENT_DIR)
 
-from retrieval.searcher import AdvancedLPDPSearcher
-from llm.generator import LPDPGenerator
+from pipeline.pipeline_rag import RAGPipeline
 
 def main():
     print("=" * 70)
@@ -14,16 +13,7 @@ def main():
     print("=" * 70)
 
     try:
-        # 1. Inisialisasi Retriever
-        searcher = AdvancedLPDPSearcher()
-        retriever = searcher.final_pipeline
-
-        # 2. Inisialisasi LLM
-        generator = LPDPGenerator()
-
-        # 3. Menggabungkan Retriever dan LLM
-        rag_chain = generator.create_rag_chain()
-
+        pipeline = RAGPipeline()
         print("[STATUS] Chatbot TanyaLPDP Aktif!")
         print("Silahkan ketik pertanyaan seputar Beasiswa LPDP.")
         print("(Ketik 'keluar' atau 'exit' untuk menyudahi percakapan\n)")
@@ -46,21 +36,16 @@ def main():
                 print("\nTanyaLPDP sedang berpikir dan membaca dokumen...")
 
                 # Jalankan Pipeline RAG
-                docs = retriever.invoke(user_query)
-                context = generator._format_docs(docs)
-                sources = generator._extract_sources(docs)
-                response = rag_chain.invoke({
-                    "context": context,
-                    "question": user_query
-                })
+                result = pipeline.ask(user_query)
                 
+                print(f"\nChatbot TanyaLPDP:\n{result['answer']}")
 
-                print(f"\nChatbot TanyaLPDP: \n{response}")
                 print("\nReferensi:")
-                for source in sources:
+                for source in result['sources']:
                     print(f"- {source['source']} (Hal. {source['page']})")
-
+                
                 print("\n" + "-" * 70)
+
 
             except KeyboardInterrupt:
                 print("\n\nProgram diberhentikan paksa. Sampai Jumpa!")
