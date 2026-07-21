@@ -1,5 +1,5 @@
 from langchain_huggingface import HuggingFaceEmbeddings
-from config.config import EMBEDDING_MODEL
+from config.config import EMBEDDING_MODEL, DEVICE
 
 def get_embedding_model():
     """
@@ -8,7 +8,7 @@ def get_embedding_model():
     try:
         embeddings = HuggingFaceEmbeddings(
             model_name=EMBEDDING_MODEL,
-            model_kwargs={'device': 'cuda'}
+            model_kwargs={'device': DEVICE}
         )
 
         return embeddings

@@ -14,7 +14,7 @@ ROOT_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.append(ROOT_DIR)
 
 from indexing.embedding import get_embedding_model
-from config.config import VECTOR_SEARCH_K, BM25_K, RERANKER_MODEL, RERANK_TOP_N
+from config.config import VECTOR_SEARCH_K, BM25_K, RERANKER_MODEL, RERANK_TOP_N, DEVICE
 
 
 class AdvancedLPDPSearcher:
@@ -63,7 +63,7 @@ class AdvancedLPDPSearcher:
 
         rerank_model = HuggingFaceCrossEncoder(
             model_name=RERANKER_MODEL,
-            model_kwargs={"device": "cuda"},
+            model_kwargs={"device": DEVICE},
         )
         reranker = CrossEncoderReranker(model=rerank_model, top_n = RERANK_TOP_N)
 
