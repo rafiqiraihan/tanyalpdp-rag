@@ -9,9 +9,6 @@ venv/
 __pycache__/
 *.pyc
 
-# Vector Database
-data/vector_db/
-
 # Scripts Testing
 scripts
 
