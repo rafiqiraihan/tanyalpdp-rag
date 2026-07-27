@@ -1,7 +1,7 @@
 # pipeline/rag_pipeline.py
 
 from retrieval.searcher import AdvancedLPDPSearcher
-from llm.generator import LPDPGenerator
+from generation.generator import LPDPGenerator
 
 class RAGPipeline:
     def __init__(self):
