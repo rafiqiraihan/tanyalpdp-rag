@@ -1,22 +1,60 @@
 # TanyaLPDP – Retrieval Augmented Generation (RAG) Chatbot
 
+> An end-to-end Retrieval-Augmented Generation (RAG) chatbot that answers questions about LPDP scholarships using official documents, featuring hybrid retrieval, Cross-Encoder reranking, source citation, and a FastAPI-based REST API.
+
 ## Overview
 
-TanyaLPDP is a personal portfolio project that demonstrates the implementation of a Retrieval-Augmented Generation (RAG) system using publicly available LPDP scholarship documents as its knowledge base. This project aims to explore document search, re-ranking, and an LLM-based question-and-answer system that includes source citations. This project is not an official LPDP application or service.
+TanyaLPDP is an end-to-end Retrieval-Augmented Generation (RAG) application that answers questions about LPDP scholarship programs using official documents as its knowledge base. The system combines hybrid retrieval, Cross-Encoder reranking, and LLM-based generation to provide grounded responses with source citations. It is designed as a portfolio project to demonstrate AI Engineering practices, including modular architecture, API serving with FastAPI, and containerization with Docker.
 
-## Key Higlight
+## Demo
 
-* Answers questions using Retrieval-Augmented Generation (RAG)
-* Combines semantic search (Chroma) and keyword search (BM25) through Hybrid Retrieval
-* Improves retrieval quality using Cross-Encoder Reranking
-* Provides source citations from the original LPDP documents
-* Built with a modular architecture for easy maintenance and future deployment
+<img width="1301" height="910" alt="Screenshot 2026-07-11 193045" src="https://github.com/user-attachments/assets/1be7262e-d753-4d23-8d56-b5187988f5cb" />
 
-## Project Objective
+## Key Highlights
 
-The objective of this project is to implement an end-to-end Retrieval-Augmented Generation (RAG) pipeline capable of answering questions based on LPDP scholarship documents while providing grounded responses with source citations.
+* Answers questions using official LPDP scholarship documents
+* Hybrid Retrieval (BM25 + Vector Search)
+* Cross-Encoder Reranking for improved retrieval precision
+* Grounded responses with source citations
+* FastAPI REST API
+* Dockerized application
+* Modular AI pipeline designed for maintainability
 
-This project was also developed as a personal portfolio
+## Why This Project
+
+Official LPDP scholarship guides contain hundreds of pages, making manual information retrieval time-consuming.
+
+This project demonstrates how Retrieval-Augmented Generation (RAG) can provide grounded answers with citations while reducing hallucinations through retrieval, reranking, and prompt engineering.
+
+## Engineering Decisions
+
+### Why Hybrid Retrieval?
+
+Dense retrieval captures semantic similarity, while BM25 excels at exact keyword matching. Combining both improves retrieval recall across different query types.
+
+---
+
+### Why Cross-Encoder Reranking?
+
+The initial retrieval stage prioritizes recall by returning multiple candidate chunks. A Cross-Encoder reranks these candidates to improve precision before passing them to the LLM.
+
+---
+
+### Why Source Citation?
+
+Every generated answer includes document references so users can verify information directly from the original LPDP documents, reducing hallucination risk.
+
+---
+
+### Why FastAPI?
+
+FastAPI provides lightweight, high-performance REST APIs for serving the RAG pipeline and simplifies integration with external applications.
+
+---
+
+### Why Docker?
+
+Containerization ensures reproducible environments and simplifies deployment across different machines.
 
 ## Features
 
@@ -27,7 +65,7 @@ The features I built for this project are as follows:
 * Hybrid Retrieval
 * Cross-Encoder Reranking
 * Source Citation
-* Interactive CLI Chat Interface
+* RESTful API using FastAPI
 
 ## Architecture
 
@@ -42,54 +80,78 @@ The features I built for this project are as follows:
 <img width="453" height="623" alt="Diagram RAG TanyaLPDP drawio" src="https://github.com/user-attachments/assets/c901d5d3-1f7b-49c9-bf8e-901e1921af15" />
 
 
-The user asks a question, which then triggers the retrieval process to find the relevant document chunks. The retrieval process uses two methods to improve accuracy by employing precise meanings and keywords to search for information stored in the database, which has already undergone indexing. Afterward, five highly relevant and precise chunks are selected. These five chunks are processed by an LLM, which operates using the Groq API and is provided with a prompt based on the project’s requirements, generating an answer along with citation sources.
+1. User sends a question via FastAPI.
+
+2. Hybrid Retrieval retrieves candidate chunks.
+
+3. Cross-Encoder reranks the candidates.
+
+4. Top-ranked chunks are passed to the LLM.
+
+5. The LLM generates a grounded answer with source citations.
 
 ## Tech Stack
 
-| Category  | Technology                       |
-| --------- | -------------------------------- |
-| Language  | Python                           |
-| Framework | LangChain                        |
-| Vector DB | Chroma                           |
-| Embedding | BAAI/bge-m3                      |
-| Reranker  | BAAI/bge-reranker-base           |
-| LLM       | Llama 3.3 via Groq API           |
-| Retrieval | Hybrid Retrieval (Chroma + BM25) |
+| Category              | Technology                       |
+| --------------------- | -------------------------------- |
+| Language              | Python                           |
+| Backend               | FastAPI                          |
+| AI Framework          | LangChain                        |
+| Vector Database       | ChromaDB                         |
+| Embedding             | BAAI/bge-m3                      |
+| Retrieval             | Hybrid Retrieval (Chroma + BM25) |
+| Reranker              | BAAI/bge-reranker-base           |
+| LLM                   | Llama 3.3 via Groq API           |
+| Containerization      | Docker                           |
 
 
 ## Project Structure
 ```text
 TanyaLPDP/
 │
+├── api/                       # FastAPI application, request/response schemas, and API endpoints
+│   ├── main.py 
+│   └── schemas.py 
+│ 
+├── config/                   # Centralized project configuration
+│   └── config.py 
+│ 
 ├── data/
-│   ├── raw/                  # Save the original LPDP guide document as a PDF
-│   └── vector_db/            # Local directory for the Chroma DB database
-├── ingestion
-|   └── load_data.py          # Reading and extracting text from PDFs
+│   ├── raw/                  # Original LPDP PDF documents
+│   └── vector_db/            # Persisted Chroma vector database
 │
-├── indexing/                 # [UPSTREAM] Initial document processing
-│   ├── chunking.py           # Splitting text into several parts
-│   ├── embedding.py          # BGE-M3 Embedding Model Configuration
-│   ├── vector_store.py       # Storage management for Chroma DB
-│   └── index.py              # Main script for running the indexing pipeline
+├── ingestion                 # PDF loading and text extraction
+|   └── load_data.py
 │
-├── retrieval/                # [CENTER] Document search engine
-│   └── searcher.py           # Combination of BM25 + Chroma Vector + Reranker (Hybrid Search)
+├── indexing/                 # Document chunking, embedding, and indexing pipeline
+│   ├── chunking.py          
+│   ├── embedding.py          
+│   ├── vector_store.py       
+│   └── index.py          
 │
-├── generation/               # [DOWNSTREAM] Answer Compiler
-│   ├── prompt_builder.py     # Llama 3.3 Strict Instruction Template (Guardrail)
-│   └── generator.py          # Initialization of the Groq API & RAG Chain Pipeline Builder (LCEL)
+├── retrieval/                # Hybrid retrieval and reranking logic
+│   └── searcher.py           
 │
-├── .env                      # Storing a Secret API Key (Groq API Key)
-├── .gitignore                # Exclude venv/, .env, and database/ from GitHub
-├── main.py                   # Key Components of a Terminal CLI-Based Chatbot Application
-├── requirements.txt          # List of all Python libraries that must be installed
-└── README.md                 # Project Guide Documentation
+├── generation/               # Prompt engineering and LLM integration
+│   ├── prompt_builder.py     
+│   └── generator.py          
+│
+├── pipeline/                 # End-to-end RAG orchestration
+│   └── pipeline.py           
+│
+├── .dockerignore             
+├── Dockerfile                 
+├── .env                      
+├── .gitignore                
+├── main.py                   
+├── requirements-docker.txt   
+├── requirements.txt          
+└── README.md                 
 ```
 
 ## Installation
 
-Follow these steps to set up and run the TanyaLPDP Chatbot on your local machine:
+Follow these steps to set up and run TanyaLPDP locally:
 
 ### 1. Clone the Repository
 Open your terminal and clone this repository:
@@ -99,7 +161,7 @@ cd TanyaLPDP
 ```
 
 ### 2. Create and Activate a Virtual Environment
-It highly recomended to use Python 3.10.11 or newer.
+It is highly recomended to use Python 3.10.11 or newer.
 * Windows:
 ```bash
 python -m venv venv
@@ -128,30 +190,42 @@ Place your official guide PDF file into the data/raw/ directory, then run the in
 ```bash
 python indexing/index.py
 ```
+Note: The indexing pipeline only needs to be executed once, or whenever the source documents are updated.
 
-### 6. Launch the Chatbot (CLI Mode)
-Once the database has been built start main conductor script to interact with your virtual assistant directly inside your terminal:
+### 6. Run the FastAPI Application
+Once the indexing process has completed, start the FastAPI server:
 ```bash
-python main.py
+uvicorn api.main:app --reload
 ```
 
-### Quick Check before saving:
-Make sure your file structure exactly matches the references (`indexing/index.py` and `main.py`). If you haven't generated your `requirements.txt` yet, remember to do it inside your activated `(venv)` using:
+## Docker Installation
+
+Build the Docker image:
 
 ```bash
-pip freeze > requirements.txt
+docker build -t tanyalpdp .
 ```
 
-## Demo
+Run the container:
 
-<img width="1301" height="910" alt="Screenshot 2026-07-11 193045" src="https://github.com/user-attachments/assets/1be7262e-d753-4d23-8d56-b5187988f5cb" />
+```bash
+docker run -p 8000:8000 --env-file .env tanyalpdp
+```
 
+The API will be available at:
 
+```text
+http://localhost:8000
+```
+
+Once the container is running, open:
+
+```text
+http://localhost:8000/docs
+```
 ## Future Improvements
-* FastAPI REST API
-* Streamlit Web Interface
-* Docker Deployment
 * Retrieval Evaluation Framework
 * Query Expansion
 * HyDE Retrieval
 * Conversation Memory
+* Streamlit Web Interface
