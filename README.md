@@ -9,7 +9,13 @@ TanyaLPDP is an end-to-end Retrieval-Augmented Generation (RAG) application that
 ## Demo
 
 
-<img width="466" height="240" alt="0727" src="https://github.com/user-attachments/assets/a161cec9-8a60-424b-bb17-724f09a14758" />
+
+
+https://github.com/user-attachments/assets/c0caf78b-3ecb-4149-a294-f0f7b2cc01d5
+
+
+
+
 
 
 
