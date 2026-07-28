@@ -11,7 +11,11 @@ TanyaLPDP is an end-to-end Retrieval-Augmented Generation (RAG) application that
 
 
 
-https://github.com/user-attachments/assets/c0caf78b-3ecb-4149-a294-f0f7b2cc01d5
+
+
+https://github.com/user-attachments/assets/8a3e4b09-e72a-4ad1-9b55-6941ec89273e
+
+
 
 
 
@@ -78,15 +82,16 @@ The features I built for this project are as follows:
 
 ## Architecture
 
-### Indexing
+### Document Indexing Pipeline
 
-<img width="300" height="434" alt="Diagram RAG TanyaLPDP drawio (2)" src="https://github.com/user-attachments/assets/931be1cc-36ad-4413-9454-853d3d243f0b" />
+<img width="331" height="462" alt="Pipeline TanyaLPDP-Page-1" src="https://github.com/user-attachments/assets/46f1c6f2-b7ce-4d5b-a826-744f03b38bcc" />
 
 
 
-### Pipeline RAG
+### RAG Inference Pipeline
 
-<img width="453" height="623" alt="Diagram RAG TanyaLPDP drawio" src="https://github.com/user-attachments/assets/c901d5d3-1f7b-49c9-bf8e-901e1921af15" />
+<img width="442" height="911" alt="Pipeline TanyaLPDP-Copy of Page-1" src="https://github.com/user-attachments/assets/4c42ba3f-299d-49ff-a4de-cf8b10938c6f" />
+
 
 
 1. User sends a question via FastAPI.
