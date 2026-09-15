@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
-from llm.prompt_builder import get_lpdp_prompt_template
+from generation.prompt_builder import get_lpdp_prompt_template
 from config.config import LLM_MODEL, TEMPERATURE
 
 load_dotenv()

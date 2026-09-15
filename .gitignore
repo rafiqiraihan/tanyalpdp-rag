@@ -5,6 +5,10 @@ venv/
 # Environment Variables
 .env
 
+# Evaluation
+eval_dataset/
+__init__.py
+
 # Python Cache
 __pycache__/
 *.pyc

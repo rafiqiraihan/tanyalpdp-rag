@@ -1,4 +1,4 @@
-# pipeline/rag_pipeline.py
+# pipeline/pipeline_rag.py
 
 from retrieval.searcher import AdvancedLPDPSearcher
 from generation.generator import LPDPGenerator

@@ -79,7 +79,7 @@ class AdvancedLPDPSearcher:
 if __name__ == "__main__":
     searcher = AdvancedLPDPSearcher()
 
-    query_test = "Berapa batas usia maksimal mendaftar beasiswa LPDP Magister?"
+    query_test = "Apa saja persyaratan umum pendaftaran Beasiswa STEM Industri Strategis?"
     results = searcher.search(query_test)
 
     print("\n============= HASIL RERANKING AKHIR =============")
