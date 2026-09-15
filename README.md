@@ -289,8 +289,8 @@ Once the container is running, open:
 http://localhost:8000/docs
 ```
 ## Future Improvements
-* Retrieval Evaluation Framework
 * Query Expansion
 * HyDE Retrieval
 * Conversation Memory
 * Streamlit Web Interface
+* Agentic RAG / Tool Calling
