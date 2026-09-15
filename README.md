@@ -105,6 +105,49 @@ The features I built for this project are as follows:
 | Containerization      | Docker                           |
 
 
+## Evaluation
+
+### End-to-End RAG Evaluation
+
+The entire TanyaLPD RAG workflow was evaluated using RAGAS on 40 question-reference pairs.
+
+The evaluation used four metrics:
+
+- **Faithfulness** — measures whether generated answers are supported by the retrieved context.
+- **Context Recall** — measures whether the retrieved context contains the information required to answer the question.
+- **Context Precision** — measures how relevant the retrieved context is.
+- **Answer Relevancy** — measures how directly the generated answer addresses the user's question.
+
+### RAGAS Results
+
+| Metric | Mean |
+|---|---:|
+| Faithfulness | 0.944 |
+| Context Recall | 0.947 |
+| Context Precision | 0.910 |
+| Answer Relevancy | 0.784 |
+
+### Analysis
+
+The evaluation shows that the system performs strongly in grounding and retrieval coverage.
+
+**Faithfulness achieved 0.944**, indicating that generated answers were generally supported by the retrieved context.
+
+**Context Recall achieved 0.947**, suggesting that the retrieval pipeline usually provided the information required to answer the evaluated questions.
+
+**Context Precision achieved 0.910**, showing that most retrieved context was relevant, although some queries still returned partially irrelevant information.
+
+**Answer Relevancy achieved 0.784**, making it the weakest of the four metrics. This suggests that the main remaining improvement area is the quality and directness of the generated responses rather than retrieval coverage alone.
+
+The results also show that a strong aggregate score does not mean the system is error-free. Individual failure cases were observed during evaluation, demonstrating the importance of analyzing both aggregate metrics and individual examples.
+
+### Evaluation Limitations
+
+The evaluation was conducted on 40 question-reference pairs and should therefore be considered a baseline rather than a comprehensive measurement of performance across all possible LPDP questions.
+
+RAGAS scores are also evaluator-dependent and should be interpreted as indicators of system behavior rather than absolute measures of answer quality.
+
+
 ## Project Structure
 ```text
 TanyaLPDP/
@@ -119,6 +162,14 @@ TanyaLPDP/
 ├── data/
 │   ├── raw/                  # Original LPDP PDF documents
 │   └── vector_db/            # Persisted Chroma vector database
+│
+├── evaluation/
+│   ├── build_eval_dataset_checkpointed.py
+│   ├── evals.py
+│   ├── checkpoint.jsonl
+│   ├── ragas_results_Qwen2.5-7b.csv
+│   └── rag.py
+│
 │
 ├── ingestion                 # PDF loading and text extraction
 |   └── load_data.py
