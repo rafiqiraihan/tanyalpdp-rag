@@ -123,7 +123,7 @@ The features I built for this project are as follows:
 
 ### End-to-End RAG Evaluation
 
-The entire TanyaLPD RAG workflow was evaluated using RAGAS on 40 question-reference pairs.
+The entire TanyaLPDP RAG workflow was evaluated using RAGAS on 40 question-reference pairs covering multiple LPDP scholarship schemes (Akselerasi Magister, STEM Industri Strategis, SHARE, Fellowship).
 
 The evaluation used four metrics:
 
@@ -131,6 +131,8 @@ The evaluation used four metrics:
 - **Context Recall** — measures whether the retrieved context contains the information required to answer the question.
 - **Context Precision** — measures how relevant the retrieved context is.
 - **Answer Relevancy** — measures how directly the generated answer addresses the user's question.
+
+*Evaluator LLM: Qwen2.5-7B-Instruct (local, via Ollama). Embedding: BAAI/bge-m3.*
 
 ### RAGAS Results
 
@@ -149,17 +151,27 @@ The evaluation shows that the system performs strongly in grounding and retrieva
 
 **Context Recall achieved 0.947**, suggesting that the retrieval pipeline usually provided the information required to answer the evaluated questions.
 
-**Context Precision achieved 0.910**, showing that most retrieved context was relevant, although some queries still returned partially irrelevant information.
+**Context Precision achieved 0.910**, showing that most retrieved context was relevant, although some queries still returned partially irrelevant information — a reasonable trade-off after increasing retrieval depth (`k=10,10,5`) to improve recall on multi-part questions (see below).
 
-**Answer Relevancy achieved 0.784**, making it the weakest of the four metrics. This suggests that the main remaining improvement area is the quality and directness of the generated responses rather than retrieval coverage alone.
+**Answer Relevancy achieved 0.784**, making it the weakest of the four metrics. This suggests the main remaining improvement area is response directness rather than retrieval coverage.
 
-The results also show that a strong aggregate score does not mean the system is error-free. Individual failure cases were observed during evaluation, demonstrating the importance of analyzing both aggregate metrics and individual examples.
+### Key Debugging Insight: Judge Model Reliability
+
+A strong aggregate score does not automatically mean the evaluation itself is trustworthy — the RAGAS judge LLM's capability directly affects metric reliability, not just the RAG system's quality.
+
+**Initial faithfulness scores were misleading.** Using a 3B-parameter judge model (`qwen2.5:3b`) produced a bimodal faithfulness distribution (many 0.0 and 1.0 scores, mean 0.63, std 0.44). Manual inspection of several 0.0-score cases revealed **false negatives** — the generated answers were factually correct and well-grounded in the retrieved context, but the judge model failed at the multi-step statement-decomposition and entailment-checking process that the faithfulness metric requires. Smaller LLMs are known to be less reliable at this kind of structured reasoning task.
+
+Switching the judge to a 7B-parameter model (`qwen2.5:7b-instruct`) resolved this: faithfulness rose to 0.94 with a far more consistent distribution (std dropped to 0.13), and previously-unexplained 0.0 scores disappeared for answers that were actually correct.
+
+**Takeaway:** RAGAS scores are only as reliable as the judge LLM used to compute them. Before drawing conclusions from aggregate metrics, it's worth manually spot-checking low-scoring individual cases — especially when using smaller local models as the evaluator.
+
+### Known Issue
+
+One case (2.5% of the evaluation set) returned a "information not found" fallback response despite the retrieved context containing the necessary information (context recall = 1.0 for that case). Root cause: the relevant content was fragmented across non-contiguous chunks due to fixed-size chunking splitting a FAQ-style answer mid-list, interspersed with unrelated sections. This points to a chunking-strategy limitation on Q&A-formatted source documents rather than a retrieval or generation failure. Planned fix: heading-aware chunking for FAQ-style sections instead of fixed-size splitting.
 
 ### Evaluation Limitations
 
-The evaluation was conducted on 40 question-reference pairs and should therefore be considered a baseline rather than a comprehensive measurement of performance across all possible LPDP questions.
-
-RAGAS scores are also evaluator-dependent and should be interpreted as indicators of system behavior rather than absolute measures of answer quality.
+The evaluation was conducted on 40 question-reference pairs and should be considered a baseline rather than a comprehensive measurement across all possible LPDP questions. RAGAS scores are also evaluator-dependent (see above) and should be interpreted as indicators of system behavior rather than absolute measures of answer quality.
 
 
 ## Project Structure
