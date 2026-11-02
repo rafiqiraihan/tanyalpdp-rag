@@ -115,7 +115,7 @@ The features I built for this project are as follows:
 | Embedding             | BAAI/bge-m3                      |
 | Retrieval             | Hybrid Retrieval (Chroma + BM25) |
 | Reranker              | BAAI/bge-reranker-base           |
-| LLM                   | Llama 3.3 via Groq API           |
+| LLM                   | openai/gpt-oss-120b via Groq API |
 | Containerization      | Docker                           |
 
 
